@@ -22,6 +22,9 @@ services:
     container_name: grocy-nginx
     networks:
       - net_homeapps
+    secrets:
+      - grocy_ssl_cert
+      - grocy_ssl_key
 
   grocy:
     image: "grocy/grocy:v2.7.1-3"
@@ -52,3 +55,10 @@ networks:
   net_homeapps:
     external: true
     name: net_homeapps
+
+secrets:
+  grocy_ssl_cert:
+    file: /root/certs/grocy/grocy.lan.clc.pw.crt
+  grocy_ssl_key:
+    file: /root/certs/grocy/grocy.lan.clc.pw.key
+
