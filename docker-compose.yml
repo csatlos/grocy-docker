@@ -19,7 +19,7 @@ services:
       - /tmp
     volumes:
       - /var/log/nginx
-    container_name: nginx
+    container_name: grocy-nginx
     networks:
       - net_homeapps
 
