@@ -15,10 +15,6 @@ RUN     apk add --no-cache \
 RUN     apk add --no-cache \
             nginx
 
-# Configure TLS certificates
-RUN     chown nginx /run/secrets/grocy_ssl_cert && \
-        chown nginx /run/secrets/grocy_ssl_key
-
 # Configure directory permissions
 RUN     chown -R nginx /var/log/nginx && \
         rm -rf /var/www/localhost && \
