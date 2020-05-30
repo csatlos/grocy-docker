@@ -12,14 +12,16 @@ services:
     depends_on:
       - grocy
     ports:
-      - '127.0.0.1:80:8080'
-      - '127.0.0.1:443:8443'
+      - '9180:8080'
+      - '9143:8443'
     read_only: true
     tmpfs:
       - /tmp
     volumes:
       - /var/log/nginx
     container_name: nginx
+    networks:
+      - net_homeapps
 
   grocy:
     image: "grocy/grocy:v2.7.1-3"
@@ -40,6 +42,13 @@ services:
     env_file:
       - grocy.env
     container_name: grocy
+    networks:
+      - net_homeapps
 
 volumes:
   app-db:
+
+networks:
+  net_homeapps:
+    external: true
+    name: net_homeapps
