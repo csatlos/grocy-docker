@@ -35,6 +35,8 @@ Runtime environment variables are read by `docker-compose` from the [grocy.env](
 
 The default login credentials are username `admin` and password `admin`; please change these before providing end-user access to your deployment.
 
+This configuration uses SSL certificates for nginx that are stored on the Docker host and passed to the container via Docker Secrets. Please confirm the .crt and .key files are present in the expected location.
+
 #### Demo Mode
 
 To run the container in demo mode, override the `GROCY_MODE` environment variable at application run-time:
