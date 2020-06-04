@@ -2,17 +2,19 @@ version: '3.7'
 
 services:
 
-  nginx:
+  grocy-nginx:
     image: "csatlos/grocy-nginx:v2.7.1-3"
     build:
       args:
         GROCY_VERSION: v2.7.1
       context: .
       dockerfile: Dockerfile-grocy-nginx
+    environment:
+      - "TZ=America/Toronto"
     depends_on:
       - grocy
     ports:
-      - '9180:8080'
+      - '9145:8080'
       - '9143:8443'
     read_only: true
     tmpfs:
@@ -39,6 +41,8 @@ services:
         GROCY_VERSION: v2.7.1
       context: .
       dockerfile: Dockerfile-grocy
+    environment:
+      - "TZ=America/Toronto" 
     expose:
       - '9000'
     read_only: true
@@ -52,9 +56,37 @@ services:
     container_name: grocy
     networks:
       - net_homeapps
-
+  grocy-barcode:
+    image: "csatlos/grocy-barcode"
+    build:
+      context: ./barcodebuddy-docker
+      dockerfile: Dockerfile
+    depends_on:
+      - grocy
+      - grocy-nginx
+    ports:
+      - '9165:80'
+      - '9163:443'
+    volumes:
+      - bbconfig:/config
+    container_name: grocy-barcode
+    environment:
+      - IGNORE_SSL_CA=true
+      - "TZ=America/Toronto"
+    networks:
+      - net_homeapps
+    secrets:
+      - source: barcode_ssl_cert
+        uid: '101'
+        gid: '101'
+        mode: 0440
+      - source: barcode_ssl_key
+        uid: '101'
+        gid: '101'
+        mode: 0440
 volumes:
   app-db:
+  bbconfig:
 
 networks:
   net_homeapps:
@@ -66,4 +98,7 @@ secrets:
     file: /root/certs/grocy/grocy.lan.clc.pw.crt
   grocy_ssl_key:
     file: /root/certs/grocy/grocy.lan.clc.pw.key
-
+  barcode_ssl_cert:
+    file: /root/certs/grocy/barcode.lan.clc.pw.crt
+  barcode_ssl_key:
+    file: /root/certs/grocy/barcode.lan.clc.pw.key

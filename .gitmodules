@@ -1,0 +1,3 @@
+[submodule "barcodebuddy-docker"]
+	path = barcodebuddy-docker
+	url = https://github.com/Forceu/barcodebuddy-docker.git
